@@ -2,6 +2,7 @@ package com.pontocontrole;
 
 import com.pontocontrole.domain.Employee;
 import com.pontocontrole.domain.RecordTime;
+import com.pontocontrole.domain.enums.DayOfWeekEnum;
 import com.pontocontrole.repositories.EmployeeRepository;
 import com.pontocontrole.repositories.RecordTimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class PontocontroApplication implements CommandLineRunner {
 	public LocalTime time = LocalTime.now();
 	public LocalDate date = LocalDate.now();
 
+
 	@Autowired
 	private EmployeeRepository employeeRepository;
 	@Autowired
@@ -35,9 +37,9 @@ public class PontocontroApplication implements CommandLineRunner {
 
 		Employee employee1 = new Employee(null, "Marcelo", "123456", "Analista", "Desenvolvimento");
 
-		RecordTime rec1 = new RecordTime(null,time,date, 1, 1, employee1 );
+		RecordTime rec1 = new RecordTime(null,time,date, DayOfWeekEnum.MONDAY,  employee1 );
 
-		employee1.getRecords().removeAll(Arrays.asList(rec1));
+		employee1.getRecords().addAll(Arrays.asList(rec1));
 
 		employeeRepository.saveAll(asList(employee1));
 		recordTimeRepository.saveAll(asList(rec1));

@@ -1,6 +1,10 @@
 package com.pontocontrole.services;
 
 import com.pontocontrole.domain.Employee;
+import com.pontocontrole.domain.RecordTime;
+import com.pontocontrole.domain.enums.DayOfWeekEnum;
+import com.pontocontrole.dto.EmployeeDTO;
+import com.pontocontrole.dto.EmployeeNewDTO;
 import com.pontocontrole.repositories.EmployeeRepository;
 import com.pontocontrole.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +19,7 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    public Employee findById(Integer id){
+    public Employee find(Integer id){
 
         Optional<Employee> obj = employeeRepository.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException(
@@ -29,7 +33,7 @@ public class EmployeeService {
     }
 
     public Employee update(Employee obj) {
-        Employee newObj = findById(obj.getId());
+        Employee newObj = find(obj.getId());
         updateData(newObj, obj);
         return employeeRepository.save(newObj);
     }
@@ -41,7 +45,7 @@ public class EmployeeService {
     }
 
     public void delete(Integer id) {
-        findById(id);
+        find(id);
         try {
             employeeRepository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
@@ -49,4 +53,18 @@ public class EmployeeService {
         }
 
     }
+
+    public Employee fromDTO(EmployeeDTO objDTO){
+        return new Employee(null, objDTO.getName(), objDTO.getRegistry(), objDTO.getRole(), objDTO.getDepartament());
+
+    }
+
+    public Employee fromDTO(EmployeeNewDTO objDTO){
+        Employee employee = new Employee(null, objDTO.getName(), objDTO.getRegistry(), objDTO.getRole(), objDTO.getDepartament());
+        RecordTime recordTime = new RecordTime(null, null,null, DayOfWeekEnum.toEnum(objDTO.getDayOfWeek()), objDTO.getEmployee());
+        employee.getRecords().add(recordTime);
+        return employee;
+    }
+
+
 }

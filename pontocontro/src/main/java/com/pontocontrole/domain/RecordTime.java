@@ -1,7 +1,10 @@
 package com.pontocontrole.domain;
 
+import com.pontocontrole.domain.enums.DayOfWeekEnum;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
@@ -14,17 +17,20 @@ public class RecordTime implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "Time")
-    private LocalTime time = LocalTime.now();
+    private LocalTime time;
     @Column(name = "Date")
-    private LocalDate date = LocalDate.now();
+    private LocalDate date;
     @Column(name = "DayofWeek")
-    private Integer dayOfWeek;
-    @Column(name = "Status")
-    private Integer status;
+    private String dayOfWeek;
+
+
+
 
     @ManyToOne
-    @JoinColumn(name = "employeeCod")
+    @JoinColumn(name = "timebank")
     private Employee employee;
+
+
 
     //CONSTRUCTS
 
@@ -32,19 +38,21 @@ public class RecordTime implements Serializable {
 
     }
 
-    public RecordTime(Integer id, LocalTime time, LocalDate date, Integer dayOfWeek, Integer status, Employee employee) {
+    public RecordTime(Integer id, LocalTime time, LocalDate date, DayOfWeekEnum dayOfWeek, Employee employee) {
         this.id = id;
         this.time = time;
         this.date = date;
-        this.dayOfWeek = dayOfWeek;
-        this.status = status;
+        this.dayOfWeek = (dayOfWeek == null) ?  null: dayOfWeek.getDesc();
+
         this.employee = employee;
     }
+
+
 
     //GET&SET'S
 
 
-    public Employee getEmployee() {
+   public Employee getEmployee() {
         return employee;
     }
 
@@ -61,7 +69,7 @@ public class RecordTime implements Serializable {
     }
 
     public LocalTime getTime() {
-        return time;
+        return time = time;
     }
 
     public void setTime(LocalTime time) {
@@ -76,21 +84,14 @@ public class RecordTime implements Serializable {
         this.date = date;
     }
 
-    public Integer getDayOfWeek() {
+    public String getDayOfWeek() {
         return dayOfWeek;
     }
 
-    public void setDayOfWeek(Integer dayOfWeek) {
+    public void setDayOfWeek(String dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
     }
 
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
 
     //HASH&CODES
 

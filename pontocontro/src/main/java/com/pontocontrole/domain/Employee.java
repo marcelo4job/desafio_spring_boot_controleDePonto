@@ -1,5 +1,8 @@
 package com.pontocontrole.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,8 +25,20 @@ public class Employee implements Serializable {
     @Column(name = "Departament")
     private String departament;
 
+
+    @JsonIgnore
     @OneToMany(mappedBy = "employee")
     private List<RecordTime> records = new ArrayList<>();
+
+
+//    @ManyToMany
+//    @JoinTable(name =  "EMPLOYEE_TIMEBANK",
+//            joinColumns = @JoinColumn(name="employee_id"),
+//            inverseJoinColumns = @JoinColumn(name = "banktime_id")
+//    )
+   // private TimeBank timeBank;
+
+
 
 
     //CONSTRUCTS
@@ -31,16 +46,24 @@ public class Employee implements Serializable {
 
     }
 
-    public Employee(Integer id, String name, String matricula, String cargo, String setor) {
+    public Employee(Integer id, String name, String registry, String cargo, String departament) {
         this.id = id;
         this.name = name;
-        this.registry = matricula;
+        this.registry = registry;
         this.role = cargo;
-        this.departament = setor;
+        this.departament = departament;
     }
 
     //GETS&SET'S
 
+
+//    public TimeBank getTimeBank() {
+//        return timeBank;
+//    }
+//
+//    public void setTimeBank(TimeBank timeBank) {
+//        this.timeBank = timeBank;
+//    }
 
     public List<RecordTime> getRecords() {
         return records;
